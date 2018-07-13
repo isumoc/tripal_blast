@@ -68,7 +68,8 @@ $no_hits = TRUE;
         <a href="<?php print '../../' . $blast_job->files->result->html; ?>">Alignment</a>,
         <a href="<?php print '../../' . $blast_job->files->result->tsv; ?>">Tab-Delimited</a>,
         <a href="<?php print '../../' . $blast_job->files->result->xml; ?>">XML</a>,
-        <a href="<?php print '../../' . $blast_job->files->result->gff; ?>">GFF3</a>
+        <a href="<?php print '../../' . $blast_job->files->result->gff; ?>">GFF3</a>,
+        <a href="<?php print '../../' . $blast_job->files->result->json; ?>">JSON</a>
       </div>
       <br />
       <div class="blast-query-info"><strong>Query Information</strong>:

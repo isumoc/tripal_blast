@@ -158,7 +158,7 @@ function get_BLAST_job($job_id) {
   $job->files->result->tsv = $blastjob->result_filestub . '.tsv';
   $job->files->result->html = $blastjob->result_filestub . '.html';
   $job->files->result->gff = $blastjob->result_filestub . '.gff';
-
+  $job->files->result->json = $blastjob->result_filestub . '.json';
   return $job;
 }
 
@@ -185,6 +185,7 @@ function run_BLAST_tripal_job($program, $query, $database, $output_filestub, $op
   $output_file_tsv = $output_filestub . '.tsv';
   $output_file_html = $output_filestub . '.html';
   $output_file_gff = $output_filestub . '.gff';
+  $output_file_json = $output_filestub . '.json';
 
   print "\nExecuting $program\n\n";
   print "Query: $query\n";
@@ -288,6 +289,20 @@ function run_BLAST_tripal_job($program, $query, $database, $output_filestub, $op
       TRIPAL_WARNING,
       "Unable to convert BLAST ASN.1 archive to Tabular Output (%archive => %file).",
       array('%archive' => $output_file, '%file' => $output_file_tsv),
+      array('print' => TRUE)
+    );
+  }
+
+  print "\tJSON\n";
+  $format_cmd = escapeshellarg($blast_formatter_command) . ' -archive ' . escapeshellarg($output_file) . ' -outfmt 15 -out ' . escapeshellarg($output_file_json);
+  print "\t\tExecuting $format_cmd\n\n";
+  system($format_cmd);
+  if (!file_exists($output_file_json)) {
+    tripal_report_error(
+      'blast_ui',
+      TRIPAL_WARNING,
+      "Unable to convert BLAST ASN.1 archive to JSON (%archive => %file).",
+      array('%archive' => $output_file, '%file' => $output_file_json),
       array('print' => TRUE)
     );
   }
