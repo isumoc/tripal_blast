@@ -86,7 +86,9 @@ function blast_ui_preprocess_show_blast_report(&$vars) {
 
     $max_results = intval(variable_get('blast_ui_max_results_displayed', 500));
     if ($vars['num_results'] < $max_results) {
-      $vars['xml'] = simplexml_load_file($full_path_xml);
+      $xml_reader = new XMLReader();
+      $xml_reader->open($full_path_xml);
+      $vars['xml'] = $xml_reader;
     }
     else {
       $vars['too_many_results'] = TRUE;

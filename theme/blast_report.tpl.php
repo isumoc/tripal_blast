@@ -129,16 +129,24 @@ $no_hits = TRUE;
       $rows = array();
       $count = 0;
 
+      $iterations = array();
+      while ($xml->read()) {
+        if ($xml->localName == 'Iteration') {
+          $iteration = new SimpleXMLElement($xml->readOuterXML());
+          if ($iteration)
+            $iterations[] = $iteration;
+        }
+      }
       // Parse the BLAST XML to generate the rows of the table
       // where each hit results in two rows in the table: 1) A summary of the query/hit and
       // significance and 2) additional information including the alignment
-      foreach ($xml->{'BlastOutput_iterations'}->children() as $iteration) {
+      foreach ($iterations as $iteration) {
         $children_count = $iteration->{'Iteration_hits'}->children()->count();
 
         // Save some information needed for the hit visualization.
         $target_name = '';
-        $q_name = $xml->{'BlastOutput_query-def'};
-        $query_size = $xml->{'BlastOutput_query-len'};
+        $q_name = $iteration->{'BlastOutput_query-def'};
+        $query_size = $iteration->{'BlastOutput_query-len'};
         $target_size = $iteration->{'Iteration_stat'}->{'Statistics'}->{'Statistics_db-len'};
 
         if ($children_count != 0) {
